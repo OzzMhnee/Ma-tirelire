@@ -1,0 +1,75 @@
+{
+  "auth": {
+    "login": "Connexion",
+    "signup": "Inscription",
+    "logout": "Déconnexion",
+    "email": "Adresse e-mail",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "sendResetEmail": "Envoyer le lien",
+    "iAmParent": "Je suis parent",
+    "iAmChild": "Je suis enfant",
+    "createAccount": "Créer un compte",
+    "alreadyHaveAccount": "Déjà un compte ?",
+    "noAccount": "Pas encore de compte ?"
+  },
+  "consent": {
+    "title": "Consentement parental",
+    "iConsent": "J'accepte les conditions",
+    "readAndAccept": "J'ai lu et j'accepte"
+  },
+  "parent": {
+    "dashboard": "Mon espace",
+    "children": "Mes enfants",
+    "missions": "Missions",
+    "transactions": "Historique",
+    "preferences": "Préférences",
+    "addChild": "Ajouter un enfant",
+    "createMission": "Créer une mission",
+    "validate": "Valider",
+    "reject": "Refuser",
+    "balance": "Solde"
+  },
+  "child": {
+    "dashboard": "Ma tirelire",
+    "myBalance": "Mon solde",
+    "missions": "Mes missions",
+    "wishlist": "Mes souhaits",
+    "level": "Niveau {{level}}",
+    "markDone": "Marquer comme terminé"
+  },
+  "mission": {
+    "title": "Titre",
+    "description": "Description",
+    "reward": "Récompense",
+    "status": {
+      "pending": "À faire",
+      "completed": "Terminée",
+      "validated": "Validée",
+      "rejected": "Refusée"
+    }
+  },
+  "wishlist": {
+    "addWish": "Ajouter un souhait",
+    "progress": "{{percent}}% atteint",
+    "canAfford": "Objectif atteint !",
+    "searchProduct": "Rechercher un produit"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "back": "Retour",
+    "close": "Fermer",
+    "yes": "Oui",
+    "no": "Non",
+    "euro": "€"
+  }
+}

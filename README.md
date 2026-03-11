@@ -1,6 +1,6 @@
 <!--
 	MaTirelire - Application éducative mobile
-	© 2025 OzzMhnee. Tous droits réservés.
+	© 2026 OzzMhnee. Tous droits réservés.
 
 	Ce code source est protégé par le droit d'auteur.
 	Toute reproduction, distribution, modification ou utilisation, totale ou partielle,
@@ -8,9 +8,6 @@
 
 	CONFIDENTIEL - Accès autorisé uniquement aux contributeurs autorisés.
 -->
-
-<!-- MAJ le 2025-12-17 par OzzMhnee -->
-<!-- MAJ le 2025-12-23 par OzzMhnee -->
 
 # Bienvenue sur l'aplication mobile MaTirelire
 

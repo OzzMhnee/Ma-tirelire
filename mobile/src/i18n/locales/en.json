@@ -1,0 +1,75 @@
+{
+  "auth": {
+    "login": "Log in",
+    "signup": "Sign up",
+    "logout": "Log out",
+    "email": "Email address",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "forgotPassword": "Forgot password?",
+    "resetPassword": "Reset password",
+    "sendResetEmail": "Send link",
+    "iAmParent": "I am a parent",
+    "iAmChild": "I am a child",
+    "createAccount": "Create account",
+    "alreadyHaveAccount": "Already have an account?",
+    "noAccount": "No account yet?"
+  },
+  "consent": {
+    "title": "Parental consent",
+    "iConsent": "I agree to the terms",
+    "readAndAccept": "I have read and I agree"
+  },
+  "parent": {
+    "dashboard": "My space",
+    "children": "My children",
+    "missions": "Missions",
+    "transactions": "History",
+    "preferences": "Preferences",
+    "addChild": "Add a child",
+    "createMission": "Create a mission",
+    "validate": "Validate",
+    "reject": "Reject",
+    "balance": "Balance"
+  },
+  "child": {
+    "dashboard": "My piggy bank",
+    "myBalance": "My balance",
+    "missions": "My missions",
+    "wishlist": "My wishes",
+    "level": "Level {{level}}",
+    "markDone": "Mark as done"
+  },
+  "mission": {
+    "title": "Title",
+    "description": "Description",
+    "reward": "Reward",
+    "status": {
+      "pending": "To do",
+      "completed": "Done",
+      "validated": "Validated",
+      "rejected": "Rejected"
+    }
+  },
+  "wishlist": {
+    "addWish": "Add a wish",
+    "progress": "{{percent}}% reached",
+    "canAfford": "Goal reached!",
+    "searchProduct": "Search for a product"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "back": "Back",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "euro": "€"
+  }
+}
