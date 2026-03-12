@@ -1,64 +1,6 @@
 {
-  "auth": {
-    "login": "Log in",
-    "signup": "Sign up",
-    "logout": "Log out",
-    "email": "Email address",
-    "username": "Username",
-    "password": "Password",
-    "confirmPassword": "Confirm password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sendResetEmail": "Send link",
-    "iAmParent": "I am a parent",
-    "iAmChild": "I am a child",
-    "createAccount": "Create account",
-    "alreadyHaveAccount": "Already have an account?",
-    "noAccount": "No account yet?"
-  },
-  "consent": {
-    "title": "Parental consent",
-    "iConsent": "I agree to the terms",
-    "readAndAccept": "I have read and I agree"
-  },
-  "parent": {
-    "dashboard": "My space",
-    "children": "My children",
-    "missions": "Missions",
-    "transactions": "History",
-    "preferences": "Preferences",
-    "addChild": "Add a child",
-    "createMission": "Create a mission",
-    "validate": "Validate",
-    "reject": "Reject",
-    "balance": "Balance"
-  },
-  "child": {
-    "dashboard": "My piggy bank",
-    "myBalance": "My balance",
-    "missions": "My missions",
-    "wishlist": "My wishes",
-    "level": "Level {{level}}",
-    "markDone": "Mark as done"
-  },
-  "mission": {
-    "title": "Title",
-    "description": "Description",
-    "reward": "Reward",
-    "status": {
-      "pending": "To do",
-      "completed": "Done",
-      "validated": "Validated",
-      "rejected": "Rejected"
-    }
-  },
-  "wishlist": {
-    "addWish": "Add a wish",
-    "progress": "{{percent}}% reached",
-    "canAfford": "Goal reached!",
-    "searchProduct": "Search for a product"
-  },
   "common": {
+    "appName": "MaTirelire",
     "loading": "Loading...",
     "error": "An error occurred",
     "retry": "Retry",
@@ -70,6 +12,183 @@
     "close": "Close",
     "yes": "Yes",
     "no": "No",
-    "euro": "€"
+    "euro": "€",
+    "logout": "Log out"
+  },
+  "tabs": {
+    "home": "Home",
+    "children": "Children",
+    "missions": "Missions",
+    "history": "History",
+    "parentAccount": "Parent Account",
+    "allChildren": "All children"
+  },
+  "auth": {
+    "login": {
+      "subtitle": "Sign in to the parent or child area.",
+      "parent": "Parent",
+      "child": "Child",
+      "email": "Email address",
+      "username": "Username",
+      "password": "Password",
+      "submit": "Log in",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "No account yet?",
+      "childPseudonym": "Username",
+      "childPin": "PIN code (4 digits)"
+    },
+    "childNoAccount": {
+      "title": "No child account?",
+      "message": "Sorry, but to use MaTirelire as a child, a parent must first download the app and create a parent account. From there, your parent can create your child profile and give you your login details (username and PIN code).\n\nAsk your parent to set it up \ud83d\ude0a",
+      "ok": "Got it"
+    },
+    "signup": {
+      "title": "Create an account",
+      "subtitle": "Set up your parent account and accept consent.",
+      "username": "Username",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "consentLabel": "I accept the",
+      "consentLink": "parental consent",
+      "submit": "Create my account",
+      "hasAccount": "Already have an account?"
+    },
+    "consent": {
+      "title": "Parental consent",
+      "subtitle": "Please read and accept the legal text below.",
+      "checkLabel": "I have read and accept the consent terms.",
+      "accept": "Accept",
+      "decline": "Decline"
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "subtitle": "Enter your email address to receive a link.",
+      "email": "Email address",
+      "submit": "Send link"
+    }
+  },
+  "parent": {
+    "common": {
+      "showMore": "Show more",
+      "showLess": "Show less"
+    },
+    "dashboard": {
+      "greeting": "Hello {{name}}",
+      "children": "My children",
+      "pendingMissions": "Pending missions ({{count}})"
+    },
+    "children": {
+      "title": "My children",
+      "empty": "No child has been added yet.",
+      "add": "Add a child",
+      "newTitle": "Add a child",
+      "editTitle": "Edit child profile",
+      "nameLabel": "Nickname",
+      "editNameLabel": "Child name",
+      "birthYearLabel": "Birth year",
+      "parentNicknameLabel": "Parent nickname",
+      "parentNicknamePlaceholder": "mom, dad, grandpa...",
+      "pinLabel": "Child PIN",
+      "pinConfirmLabel": "Confirm child PIN",
+      "pinInvalid": "PIN must contain exactly 4 digits.",
+      "pinMismatch": "PIN codes do not match.",
+      "pinConfigured": "PIN configured",
+      "pinMissing": "No PIN configured",
+      "birthYearValue": "Born in {{year}}",
+      "manualDeposit": "Money given by {{name}}",
+      "depositAmount": "Amount (€)",
+      "depositButton": "Confirm transfer",
+      "levelValue": "Level {{level}} · {{xp}} XP",
+      "badges": "Unlocked badges",
+      "noBadges": "No badge unlocked yet.",
+      "todoMissions": "To-do missions",
+      "doneMissions": "Completed missions waiting for validation",
+      "noCompletedMissions": "No mission waiting for validation.",
+      "wishlist": "Wishes and progress",
+      "progressValue": "{{current}} € / {{target}} € · {{percent}}%",
+      "historyButton": "Open history",
+      "resetPin": "Reset child PIN",
+      "resetPinSubmit": "Save new PIN",
+      "saveProfile": "Save changes",
+      "deleteChildInfo": "This action permanently deletes the child and the related history.",
+      "deleteChild": "Delete child account",
+      "deleteConfirm": "Delete this child permanently?"
+    },
+    "missions": {
+      "title": "Missions",
+      "empty": "No mission yet.",
+      "add": "Create a mission",
+      "addForChild": "Add a mission for this child",
+      "newTitle": "New mission",
+      "childLabel": "Target child",
+      "childLockedLabel": "Mission linked to this child",
+      "childRequired": "Please select a child.",
+      "noChildAvailable": "Add a child before creating a mission.",
+      "titleLabel": "Title",
+      "descriptionLabel": "Description",
+      "rewardLabel": "Reward",
+      "forChild": "For {{name}}",
+      "pendingGroup": "To do",
+      "completedGroup": "Completed and waiting for validation",
+      "validated": "Mission validated.",
+      "validateTitle": "Validate mission",
+      "validateBtn": "Validate",
+      "deleteBtn": "Delete mission",
+      "deleteConfirm": "Delete this mission permanently?",
+      "deleted": "Mission deleted."
+    },
+    "transactions": {
+      "title": "History",
+      "empty": "No transactions yet.",
+      "recent": "Recent transactions",
+      "forChild": "History for {{name}}"
+    },
+    "account": {
+      "title": "Parent Account",
+      "email": "Email address",
+      "username": "Username",
+      "passwordTitle": "Change password",
+      "currentPassword": "Current password",
+      "currentPasswordRequired": "Please enter your current password.",
+      "currentPasswordWrong": "Current password is incorrect.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "savePassword": "Update password",
+      "passwordUpdated": "Password updated.",
+      "dangerZone": "Danger zone",
+      "deleteAccount": "Delete parent account",
+      "deleteAccountInfo": "This action deletes the parent account and all linked children.",
+      "deleteAccountConfirm": "Delete the parent account and all related data permanently?"
+    }
+  },
+  "child": {
+    "dashboard": {
+      "greeting": "Hi {{name}}",
+      "balance": "Current balance",
+      "topWish": "Top wish",
+      "missions": "My missions",
+      "seeWishlist": "See my wishlist"
+    },
+    "missions": {
+      "empty": "No mission available."
+    },
+    "wishlist": {
+      "title": "My wishlist",
+      "empty": "No wish saved yet.",
+      "canAfford": "Goal reached",
+      "newTitle": "Add a wish",
+      "nameLabel": "Product name",
+      "amountLabel": "Target amount",
+      "imageUrlLabel": "Image URL"
+    }
+  },
+  "mission": {
+    "status": {
+      "pending": "To do",
+      "completed": "Done",
+      "validated": "Validated",
+      "rejected": "Rejected"
+    }
   }
 }

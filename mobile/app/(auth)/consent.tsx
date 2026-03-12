@@ -4,6 +4,7 @@ import { Text, Checkbox } from 'react-native-paper';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
+import { AuthScreenShell } from '@components/common/AuthScreenShell';
 import { Button, InlineAlert } from '@components/ui';
 import { getConsentText, CURRENT_CONSENT_VERSION } from '@utils/consent';
 
@@ -13,10 +14,7 @@ export default function ConsentScreen() {
   const consentText = getConsentText(CURRENT_CONSENT_VERSION);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text variant="headlineSmall" style={styles.title}>
-        {t('auth.consent.title')}
-      </Text>
+    <AuthScreenShell title={t('auth.consent.title')} subtitle={t('auth.consent.subtitle')}>
 
       <View style={styles.textBox}>
         <Text style={styles.body}>{consentText}</Text>
@@ -42,13 +40,11 @@ export default function ConsentScreen() {
         mode="text"
         onPress={() => router.replace('/(auth)/signup')}
       />
-    </ScrollView>
+    </AuthScreenShell>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 24, paddingTop: 48 },
-  title:     { fontWeight: '700', marginBottom: 16 },
   textBox:   { backgroundColor: '#f5f5f5', borderRadius: 8, padding: 16, marginBottom: 16 },
   body:      { fontSize: 13, lineHeight: 20, color: '#333' },
   checkRow:  { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },

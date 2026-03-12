@@ -50,6 +50,7 @@ export interface Database {
           settings?: Json;
           updated_at?: string;
         };
+        Relationships: [];
       };
       consents: {
         Row: {
@@ -75,6 +76,7 @@ export interface Database {
           consented_at?: string;
         };
         Update: never; // immuable
+        Relationships: [];
       };
       children: {
         Row: {
@@ -82,6 +84,8 @@ export interface Database {
           parent_id: string;
           pseudonym: string;
           birth_year: number | null;
+          child_pin_hash: string | null;
+          child_pin_updated_at: string | null;
           avatar_id: string;
           theme_id: string;
           level: number;
@@ -95,6 +99,8 @@ export interface Database {
           parent_id: string;
           pseudonym: string;
           birth_year?: number | null;
+          child_pin_hash?: string | null;
+          child_pin_updated_at?: string | null;
           avatar_id?: string;
           theme_id?: string;
           level?: number;
@@ -106,6 +112,8 @@ export interface Database {
         Update: {
           pseudonym?: string;
           birth_year?: number | null;
+          child_pin_hash?: string | null;
+          child_pin_updated_at?: string | null;
           avatar_id?: string;
           theme_id?: string;
           level?: number;
@@ -113,6 +121,7 @@ export interface Database {
           settings?: Json;
           updated_at?: string;
         };
+        Relationships: [];
       };
       transactions: {
         Row: {
@@ -136,6 +145,7 @@ export interface Database {
           created_by?: string | null;
         };
         Update: never; // ledger immuable
+        Relationships: [];
       };
       missions: {
         Row: {
@@ -173,6 +183,7 @@ export interface Database {
           validated_at?: string | null;
           validated_by?: string | null;
         };
+        Relationships: [];
       };
       wishlists: {
         Row: {
@@ -208,6 +219,7 @@ export interface Database {
           purchased_at?: string | null;
           notes?: string | null;
         };
+        Relationships: [];
       };
       achievements: {
         Row: {
@@ -225,6 +237,7 @@ export interface Database {
           unlocked_at?: string;
         };
         Update: never; // immuable
+        Relationships: [];
       };
       compliance_logs: {
         Row: {
@@ -242,11 +255,13 @@ export interface Database {
           created_at?: string;
         };
         Update: never;
+        Relationships: [];
       };
     };
     Views: {
       child_balances: {
         Row: { child_id: string; balance: number };
+        Relationships: [];
       };
       wishlist_progress: {
         Row: {
@@ -260,9 +275,50 @@ export interface Database {
           progress_percent: number;
           can_afford: boolean;
         };
+        Relationships: [];
       };
     };
-    Functions: Record<string, never>;
+    Functions: {
+      delete_child_account: {
+        Args: {
+          child_uuid: string;
+        };
+        Returns: undefined;
+      };
+      delete_parent_account: {
+        Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
+      set_child_pin: {
+        Args: {
+          child_uuid: string;
+          plain_pin: string;
+        };
+        Returns: undefined;
+      };
+      verify_child_pin_anon: {
+        Args: {
+          p_pseudonym: string;
+          p_pin: string;
+        };
+        Returns: Record<string, unknown>;
+      };
+      get_child_data_anon: {
+        Args: {
+          p_child_id: string;
+        };
+        Returns: Record<string, unknown>;
+      };
+      child_add_wish_anon: {
+        Args: {
+          p_child_id: string;
+          p_name: string;
+          p_price: number;
+          p_image_url: string | null;
+        };
+        Returns: Record<string, unknown>;
+      };
+    };
     Enums: {
       transaction_type: TransactionType;
       mission_status: MissionStatus;

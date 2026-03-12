@@ -2,7 +2,8 @@ import { Stack, Redirect } from 'expo-router';
 import { useAuthStore } from '@store/authStore';
 
 export default function ChildLayout() {
-  const { user, activeChild } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
+  const activeChild = useAuthStore((s) => s.activeChild);
   if (!user) return <Redirect href="/(auth)/login" />;
   if (!activeChild) return <Redirect href="/(parent)/children/index" />;
 

@@ -1,64 +1,6 @@
 {
-  "auth": {
-    "login": "Connexion",
-    "signup": "Inscription",
-    "logout": "Déconnexion",
-    "email": "Adresse e-mail",
-    "username": "Nom d'utilisateur",
-    "password": "Mot de passe",
-    "confirmPassword": "Confirmer le mot de passe",
-    "forgotPassword": "Mot de passe oublié ?",
-    "resetPassword": "Réinitialiser le mot de passe",
-    "sendResetEmail": "Envoyer le lien",
-    "iAmParent": "Je suis parent",
-    "iAmChild": "Je suis enfant",
-    "createAccount": "Créer un compte",
-    "alreadyHaveAccount": "Déjà un compte ?",
-    "noAccount": "Pas encore de compte ?"
-  },
-  "consent": {
-    "title": "Consentement parental",
-    "iConsent": "J'accepte les conditions",
-    "readAndAccept": "J'ai lu et j'accepte"
-  },
-  "parent": {
-    "dashboard": "Mon espace",
-    "children": "Mes enfants",
-    "missions": "Missions",
-    "transactions": "Historique",
-    "preferences": "Préférences",
-    "addChild": "Ajouter un enfant",
-    "createMission": "Créer une mission",
-    "validate": "Valider",
-    "reject": "Refuser",
-    "balance": "Solde"
-  },
-  "child": {
-    "dashboard": "Ma tirelire",
-    "myBalance": "Mon solde",
-    "missions": "Mes missions",
-    "wishlist": "Mes souhaits",
-    "level": "Niveau {{level}}",
-    "markDone": "Marquer comme terminé"
-  },
-  "mission": {
-    "title": "Titre",
-    "description": "Description",
-    "reward": "Récompense",
-    "status": {
-      "pending": "À faire",
-      "completed": "Terminée",
-      "validated": "Validée",
-      "rejected": "Refusée"
-    }
-  },
-  "wishlist": {
-    "addWish": "Ajouter un souhait",
-    "progress": "{{percent}}% atteint",
-    "canAfford": "Objectif atteint !",
-    "searchProduct": "Rechercher un produit"
-  },
   "common": {
+    "appName": "MaTirelire",
     "loading": "Chargement...",
     "error": "Une erreur est survenue",
     "retry": "Réessayer",
@@ -70,6 +12,183 @@
     "close": "Fermer",
     "yes": "Oui",
     "no": "Non",
-    "euro": "€"
+    "euro": "€",
+    "logout": "Déconnexion"
+  },
+  "tabs": {
+    "home": "Accueil",
+    "children": "Enfants",
+    "missions": "Missions",
+    "history": "Historique",
+    "parentAccount": "Compte Parent",
+    "allChildren": "Tous les enfants"
+  },
+  "auth": {
+    "login": {
+      "subtitle": "Connectez-vous à votre espace parent ou enfant.",
+      "parent": "Parent",
+      "child": "Enfant",
+      "email": "Adresse e-mail",
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "submit": "Connexion",
+      "forgotPassword": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "childPseudonym": "Nom d'utilisateur",
+      "childPin": "Code PIN (4 chiffres)"
+    },
+    "childNoAccount": {
+      "title": "Pas de compte enfant ?",
+      "message": "Désolé, mais pour utiliser MaTirelire en tant qu'enfant, un parent doit d'abord télécharger l'application et créer un compte parent. C'est depuis cet espace que ton parent pourra créer ton profil enfant et te donner tes identifiants de connexion (pseudo et code PIN).\n\nDemande à ton parent de s'en occuper \ud83d\ude0a",
+      "ok": "J'ai compris"
+    },
+    "signup": {
+      "title": "Créer un compte",
+      "subtitle": "Configurez votre espace parent et acceptez le consentement.",
+      "username": "Nom d'utilisateur",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "consentLabel": "J'accepte le",
+      "consentLink": "consentement parental",
+      "submit": "Créer mon compte",
+      "hasAccount": "Déjà un compte ?"
+    },
+    "consent": {
+      "title": "Consentement parental",
+      "subtitle": "Veuillez lire et accepter le texte légal ci-dessous.",
+      "checkLabel": "J'ai lu et j'accepte les conditions de consentement.",
+      "accept": "Accepter",
+      "decline": "Refuser"
+    },
+    "resetPassword": {
+      "title": "Réinitialiser le mot de passe",
+      "subtitle": "Saisissez votre adresse e-mail pour recevoir un lien.",
+      "email": "Adresse e-mail",
+      "submit": "Envoyer le lien"
+    }
+  },
+  "parent": {
+    "common": {
+      "showMore": "Afficher plus",
+      "showLess": "Afficher moins"
+    },
+    "dashboard": {
+      "greeting": "Bonjour {{name}}",
+      "children": "Mes enfants",
+      "pendingMissions": "Missions en attente ({{count}})"
+    },
+    "children": {
+      "title": "Mes enfants",
+      "empty": "Aucun enfant enregistré pour le moment.",
+      "add": "Ajouter un enfant",
+      "newTitle": "Ajouter un enfant",
+      "editTitle": "Modifier la fiche enfant",
+      "nameLabel": "Pseudonyme",
+      "editNameLabel": "Nom de l'enfant",
+      "birthYearLabel": "Année de naissance",
+      "parentNicknameLabel": "Surnom du parent",
+      "parentNicknamePlaceholder": "maman, papa, papi...",
+      "pinLabel": "Code PIN enfant",
+      "pinConfirmLabel": "Confirmer le code PIN",
+      "pinInvalid": "Le code PIN doit contenir exactement 4 chiffres.",
+      "pinMismatch": "Les codes PIN ne correspondent pas.",
+      "pinConfigured": "Code PIN configuré",
+      "pinMissing": "Aucun code PIN configuré",
+      "birthYearValue": "Né en {{year}}",
+      "manualDeposit": "Argent donné par {{name}}",
+      "depositAmount": "Montant (€)",
+      "depositButton": "Valider le transfert",
+      "levelValue": "Niveau {{level}} · {{xp}} XP",
+      "badges": "Badges débloqués",
+      "noBadges": "Aucun badge débloqué.",
+      "todoMissions": "Missions à faire",
+      "doneMissions": "Missions effectuées et à valider",
+      "noCompletedMissions": "Aucune mission en attente de validation.",
+      "wishlist": "Souhaits et progression",
+      "progressValue": "{{current}} € / {{target}} € · {{percent}}%",
+      "historyButton": "Voir l'historique",
+      "resetPin": "Réinitialiser le code PIN enfant",
+      "resetPinSubmit": "Enregistrer le nouveau code PIN",
+      "saveProfile": "Enregistrer les modifications",
+      "deleteChildInfo": "Cette action supprime définitivement l'enfant et son historique associé.",
+      "deleteChild": "Supprimer le compte enfant",
+      "deleteConfirm": "Supprimer définitivement cet enfant ?"
+    },
+    "missions": {
+      "title": "Missions",
+      "empty": "Aucune mission pour le moment.",
+      "add": "Créer une mission",
+      "addForChild": "Ajouter une mission à cet enfant",
+      "newTitle": "Nouvelle mission",
+      "childLabel": "Enfant concerné",
+      "childLockedLabel": "Mission liée à cet enfant",
+      "childRequired": "Veuillez sélectionner un enfant.",
+      "noChildAvailable": "Ajoutez d'abord un enfant pour créer une mission.",
+      "titleLabel": "Titre",
+      "descriptionLabel": "Description",
+      "rewardLabel": "Récompense",
+      "forChild": "Pour {{name}}",
+      "pendingGroup": "À faire",
+      "completedGroup": "Effectuées et en attente de validation",
+      "validated": "Mission validée.",
+      "validateTitle": "Valider la mission",
+      "validateBtn": "Valider",
+      "deleteBtn": "Supprimer la mission",
+      "deleteConfirm": "Supprimer définitivement cette mission ?",
+      "deleted": "Mission supprimée."
+    },
+    "transactions": {
+      "title": "Historique",
+      "empty": "Aucune transaction pour le moment.",
+      "recent": "Transactions récentes",
+      "forChild": "Historique de {{name}}"
+    },
+    "account": {
+      "title": "Compte Parent",
+      "email": "Adresse e-mail",
+      "username": "Nom d'utilisateur",
+      "passwordTitle": "Modifier le mot de passe",
+      "currentPassword": "Mot de passe actuel",
+      "currentPasswordRequired": "Veuillez saisir votre mot de passe actuel.",
+      "currentPasswordWrong": "Le mot de passe actuel est incorrect.",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "savePassword": "Mettre à jour le mot de passe",
+      "passwordUpdated": "Mot de passe mis à jour.",
+      "dangerZone": "Zone sensible",
+      "deleteAccount": "Suppression du compte parent",
+      "deleteAccountInfo": "Cette action supprime le compte parent et tous les enfants associés.",
+      "deleteAccountConfirm": "Supprimer définitivement le compte parent et toutes ses données ?"
+    }
+  },
+  "child": {
+    "dashboard": {
+      "greeting": "Salut {{name}}",
+      "balance": "Solde actuel",
+      "topWish": "Souhait principal",
+      "missions": "Mes missions",
+      "seeWishlist": "Voir ma wishlist"
+    },
+    "missions": {
+      "empty": "Aucune mission disponible."
+    },
+    "wishlist": {
+      "title": "Ma wishlist",
+      "empty": "Aucun souhait enregistré.",
+      "canAfford": "Objectif atteint",
+      "newTitle": "Ajouter un souhait",
+      "nameLabel": "Nom du produit",
+      "amountLabel": "Montant cible",
+      "imageUrlLabel": "URL de l'image"
+    }
+  },
+  "mission": {
+    "status": {
+      "pending": "À faire",
+      "completed": "Terminée",
+      "validated": "Validée",
+      "rejected": "Refusée"
+    }
   }
 }

@@ -27,10 +27,13 @@ export interface Child {
   parentId: string;
   pseudonym: string;
   birthYear: number | null;
+  pinConfigured?: boolean;
+  pinUpdatedAt?: string | null;
   avatarId: string;
   themeId: string;
   level: number;
   experience: number;
+  parentNickname: string | null;
   settings: ChildSettings;
   createdAt: string;
   // Calculé via la vue child_balances

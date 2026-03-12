@@ -4,8 +4,8 @@ import { useMissionsStore } from '@store/missionsStore';
 import { useAuthStore } from '@store/authStore';
 
 export function useMissions(childId?: string) {
-  const { user } = useAuthStore();
-  const { missions, isLoading, error, setMissions, updateMission, setLoading, setError } =
+  const user = useAuthStore((s) => s.user);
+  const { missions, isLoading, error, setMissions, updateMission, removeMission, setLoading, setError } =
     useMissionsStore();
 
   const load = useCallback(async () => {
@@ -35,5 +35,15 @@ export function useMissions(childId?: string) {
     [user, updateMission]
   );
 
-  return { missions, isLoading, error, refresh: load, validate };
+  const deleteMission = useCallback(
+    async (missionId: string) => {
+      if (!user) return;
+      const result = await missionsService.deleteMission(missionId);
+      if (!result.error) removeMission(missionId);
+      return result;
+    },
+    [user, removeMission]
+  );
+
+  return { missions, isLoading, error, refresh: load, validate, deleteMission };
 }

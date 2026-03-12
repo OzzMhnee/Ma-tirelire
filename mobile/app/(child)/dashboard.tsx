@@ -1,70 +1,47 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, ScrollView, StyleSheet, RefreshControl } from 'react-native';
 import { Text, ProgressBar } from 'react-native-paper';
 import { Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { Card, Badge } from '@components/ui';
-import { useAuthStore } from '@store/authStore';
-import { useMissions } from '@hooks/useMissions';
-import { useChildBalance } from '@hooks/useTransactions';
-import { wishlistService } from '@services/wishlist.service';
-import type { WishlistItem } from '@/types/domain.types';
+import { useChildDashboard } from '@hooks/useChildDashboard';
+import { formatCurrency } from '@utils/format';
 
 export default function ChildDashboard() {
   const { t } = useTranslation();
-  const activeChild = useAuthStore((s) => s.activeChild);
-  const { balance, refresh: refreshBalance } = useChildBalance(activeChild?.id ?? '');
-  const { missions, isLoading, refresh: refreshMissions } = useMissions(activeChild?.id);
-  const [wishlist, setWishlist] = React.useState<WishlistItem[]>([]);
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const load = async () => {
-    if (!activeChild) return;
-    await Promise.all([
-      refreshBalance(),
-      refreshMissions(),
-    ]);
-    const wRes = await wishlistService.getWishlist(activeChild.id);
-    if (wRes.success && wRes.data) setWishlist(wRes.data);
-  };
-
-  useEffect(() => { load(); }, [activeChild?.id]);
-
-  const onRefresh = async () => { setRefreshing(true); await load(); setRefreshing(false); };
-
-  const todoMissions = missions.filter((m) => m.status === 'todo' || m.status === 'pending');
+  const { activeChild, balance, todoMissions, topWish, isLoading, refresh } = useChildDashboard();
 
   return (
     <ScrollView
       style={styles.container}
-      refreshControl={<RefreshControl refreshing={refreshing || isLoading} onRefresh={onRefresh} />}
+      refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} />}
     >
       <View style={styles.header}>
         <Text variant="headlineMedium" style={styles.greeting}>
-          {t('child.dashboard.greeting', { name: activeChild?.name })}
+          {t('child.dashboard.greeting', { name: activeChild?.pseudonym })}
         </Text>
       </View>
 
       {/* Tirelire */}
       <Card style={styles.balanceCard}>
         <Text variant="bodyMedium" style={styles.balanceLabel}>{t('child.dashboard.balance')}</Text>
-        <Text variant="displaySmall" style={styles.balance}>{balance.toFixed(2)} €</Text>
+        <Text variant="displaySmall" style={styles.balance}>{formatCurrency(balance)}</Text>
       </Card>
 
       {/* Wishlist top */}
-      {wishlist.length > 0 && (
+      {topWish && (
         <Card style={styles.wishCard}>
           <Text variant="titleSmall" style={styles.sectionLabel}>{t('child.dashboard.topWish')}</Text>
-          <Text variant="bodyMedium">{wishlist[0].name}</Text>
-          <Text style={styles.wishPrice}>{wishlist[0].target_amount.toFixed(2)} €</Text>
+          <Text variant="bodyMedium">{topWish.productName}</Text>
+          <Text style={styles.wishPrice}>{formatCurrency(topWish.productPrice)}</Text>
           <ProgressBar
-            progress={(wishlist[0].progressPercent ?? 0) / 100}
+            progress={(topWish.progressPercent ?? 0) / 100}
             color="#512da8"
             style={styles.progress}
           />
           <Text style={styles.progressText}>
-            {Math.round(wishlist[0].progressPercent ?? 0)} %
+            {Math.round(topWish.progressPercent ?? 0)} %
           </Text>
         </Card>
       )}
@@ -79,7 +56,7 @@ export default function ChildDashboard() {
             <View style={styles.row}>
               <Text variant="bodyMedium">{m.title}</Text>
               <Badge
-                label={`${m.reward_amount.toFixed(2)} €`}
+                label={formatCurrency(m.reward)}
                 variant={m.status === 'pending' ? 'warning' : 'info'}
               />
             </View>

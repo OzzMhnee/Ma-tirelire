@@ -1,6 +1,9 @@
 import { supabase } from '@config/supabase';
 import { safeCall } from '@utils/safeCall';
-import type { Mission, MissionStatus, ServiceResult } from '@types/domain.types';
+import type { Mission, MissionStatus, ServiceResult } from '@/types/domain.types';
+import type { Database } from '@/types/database.types';
+
+type MissionRow = Database['public']['Tables']['missions']['Row'];
 
 function dbRowToMission(row: Record<string, unknown>): Mission {
   return {
@@ -55,11 +58,42 @@ export const missionsService = {
           description: data.description ?? null,
           reward: data.reward,
         })
-        .select()
+        .select("*")
         .single();
 
       if (error || !mission) throw new Error(error?.message ?? 'Erreur création.');
       return dbRowToMission(mission);
+    });
+  },
+
+  async createMissionForChildren(data: {
+    parentId: string;
+    childIds: string[];
+    title: string;
+    description?: string;
+    reward: number;
+  }): Promise<ServiceResult<Mission[]>> {
+    return safeCall(async () => {
+      const uniqueChildIds = Array.from(new Set(data.childIds));
+      if (uniqueChildIds.length === 0) {
+        throw new Error('Aucun enfant sélectionné.');
+      }
+
+      const payload = uniqueChildIds.map((childId) => ({
+        parent_id: data.parentId,
+        child_id: childId,
+        title: data.title,
+        description: data.description ?? null,
+        reward: data.reward,
+      }));
+
+      const { data: missions, error } = await supabase
+        .from('missions')
+        .insert(payload)
+        .select('*');
+
+      if (error) throw new Error(error.message);
+      return (missions ?? []).map(dbRowToMission);
     });
   },
 
@@ -72,7 +106,7 @@ export const missionsService = {
           completed_at: new Date().toISOString(),
         })
         .eq('id', missionId)
-        .select()
+        .select("*")
         .single();
 
       if (error || !data) throw new Error(error?.message ?? 'Erreur mise à jour.');
@@ -89,13 +123,14 @@ export const missionsService = {
   ): Promise<ServiceResult<Mission>> {
     return safeCall(async () => {
       // Récupérer la mission
-      const { data: mission, error: fetchError } = await supabase
+      const { data: _missionFetch, error: fetchError } = await supabase
         .from('missions')
         .select('*')
         .eq('id', missionId)
         .single();
 
-      if (fetchError || !mission) throw new Error('Mission introuvable.');
+      if (fetchError || !_missionFetch) throw new Error('Mission introuvable.');
+      const mission = _missionFetch as MissionRow;
       if (mission.status !== 'completed') {
         throw new Error('La mission doit être marquée terminée par l\'enfant.');
       }
@@ -111,10 +146,11 @@ export const missionsService = {
           validated_by: parentId,
         })
         .eq('id', missionId)
-        .select()
+        .select("*")
         .single();
 
       if (updateError || !updated) throw new Error(updateError?.message ?? 'Erreur validation.');
+      const updatedMission = updated as MissionRow;
 
       // Créer la transaction de récompense (ledger)
       const { error: txError } = await supabase.from('transactions').insert({
@@ -128,7 +164,7 @@ export const missionsService = {
 
       if (txError) throw new Error(txError.message);
 
-      return dbRowToMission(updated);
+      return dbRowToMission(updatedMission);
     });
   },
 
@@ -138,11 +174,21 @@ export const missionsService = {
         .from('missions')
         .update({ status: 'rejected' })
         .eq('id', missionId)
-        .select()
+        .select("*")
         .single();
 
       if (error || !data) throw new Error(error?.message ?? 'Erreur rejet.');
       return dbRowToMission(data);
+    });
+  },
+
+  async deleteMission(missionId: string): Promise<ServiceResult<void>> {
+    return safeCall(async () => {
+      const { error } = await supabase
+        .from('missions')
+        .delete()
+        .eq('id', missionId);
+      if (error) throw new Error(error.message);
     });
   },
 };

@@ -12,40 +12,39 @@ import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { AuthScreenShell } from '@components/common/AuthScreenShell';
 import { Input, Button, InlineAlert } from '@components/ui';
 import { useAuthActions } from '@hooks/useAuthActions';
 import { useAuthStore } from '@store/authStore';
-import { signUpSchema, SignUpInput } from '@utils/validators';
+import { signUpSchema, SignUpForm } from '@utils/validators';
 
 export default function SignupScreen() {
   const { t } = useTranslation();
   const { signUp } = useAuthActions();
-  const { isLoading, error } = useAuthStore();
+  const isLoading = useAuthStore((s) => s.isLoading);
+  const error = useAuthStore((s) => s.error);
   const [consentChecked, setConsentChecked] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpInput>({
+  } = useForm<SignUpForm>({
     resolver: zodResolver(signUpSchema),
     defaultValues: { email: '', username: '', password: '', confirmPassword: '' },
   });
 
-  const onSubmit = async (data: SignUpInput) => {
+  const onSubmit = async (data: SignUpForm) => {
     if (!consentChecked) return;
-    await signUp(data.email, data.password, data.username);
+    const success = await signUp(data);
+    if (success) router.replace('/(parent)/dashboard');
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.flex}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    <AuthScreenShell
+      title={t('auth.signup.title')}
+      subtitle={t('auth.signup.subtitle')}
     >
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Text variant="headlineMedium" style={styles.title}>
-          {t('auth.signup.title')}
-        </Text>
 
         <InlineAlert message={error} />
 
@@ -134,15 +133,11 @@ export default function SignupScreen() {
         <Link href="/(auth)/login" style={styles.link}>
           {t('auth.signup.hasAccount')}
         </Link>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    </AuthScreenShell>
   );
 }
 
 const styles = StyleSheet.create({
-  flex:        { flex: 1, backgroundColor: '#fff' },
-  container:   { padding: 24, paddingTop: 64 },
-  title:       { textAlign: 'center', fontWeight: '700', marginBottom: 16 },
   consentRow:  { flexDirection: 'row', alignItems: 'center', marginVertical: 8 },
   consentText: { flex: 1, fontSize: 13, color: '#444' },
   submitBtn:   { marginTop: 8 },

@@ -1,7 +1,7 @@
 import '../src/i18n/config';
 import { useEffect } from 'react';
 import { Stack } from 'expo-router';
-import { PaperProvider, MD3LightTheme } from 'react-native-paper';
+import { ThemeProvider } from '@/theme/ThemeProvider';
 import * as SplashScreen from 'expo-splash-screen';
 import { useSession } from '@hooks/useSession';
 import { useAuthStore } from '@store/authStore';
@@ -10,7 +10,14 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   useSession();
-  const { isLoading } = useAuthStore();
+  const isLoading = useAuthStore((s) => s.isLoading);
+
+  useEffect(() => {
+    // Déclenche la réhydratation du store persist APRÈS le montage,
+    // pour éviter que setState() soit appelé pendant useSyncExternalStore
+    // (boucle infinie React 19 + Zustand v5 + localStorage synchrone sur web)
+    useAuthStore.persist.rehydrate();
+  }, []);
 
   useEffect(() => {
     if (!isLoading) {
@@ -19,13 +26,13 @@ export default function RootLayout() {
   }, [isLoading]);
 
   return (
-    <PaperProvider theme={MD3LightTheme}>
+    <ThemeProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(parent)" />
         <Stack.Screen name="(child)" />
       </Stack>
-    </PaperProvider>
+    </ThemeProvider>
   );
 }

@@ -1,23 +1,49 @@
 import React from 'react';
-import { Card as PaperCard, CardProps } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet, StyleProp, ViewStyle, PressableProps } from 'react-native';
+import { useAppTheme } from '@/theme/ThemeProvider';
 
-interface Props extends CardProps {
+type Props = {
   children: React.ReactNode;
-}
+  style?: StyleProp<ViewStyle>;
+} & PressableProps;
 
-export function Card({ children, style, ...rest }: Props) {
+export function Card({ children, style, ...pressableProps }: Props) {
+  const { theme: { colors } } = useAppTheme();
+  const isPressable = typeof pressableProps.onPress === 'function';
+
+  const cardStyle = [
+    styles.card,
+    { backgroundColor: colors.surface, borderColor: colors.outline },
+    style,
+  ];
+
+  if (isPressable) {
+    return (
+      <Pressable
+        {...pressableProps}
+        style={({ pressed }) => [cardStyle, pressed ? styles.pressed : null]}
+      >
+        {children}
+      </Pressable>
+    );
+  }
+
   return (
-    <PaperCard style={[styles.card, style]} {...rest}>
-      <PaperCard.Content>{children}</PaperCard.Content>
-    </PaperCard>
+    <View style={cardStyle}>
+      {children}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
     borderRadius: 12,
-    marginVertical: 6,
-    elevation: 2,
+    padding: 16,
+    borderWidth: 1,
+    marginBottom: 12,
+    elevation: 1,
+  },
+  pressed: {
+    opacity: 0.9,
   },
 });

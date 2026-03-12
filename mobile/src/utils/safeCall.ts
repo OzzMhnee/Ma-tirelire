@@ -1,4 +1,4 @@
-import type { AppError, ServiceResult } from '@types/domain.types';
+import type { AppError, ServiceResult } from '@/types/domain.types';
 
 /**
  * Wrapper DRY pour tous les appels de service.

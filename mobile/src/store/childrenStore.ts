@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Child } from '@types/domain.types';
+import type { Child } from '@/types/domain.types';
 
 interface ChildrenState {
   children: Child[];

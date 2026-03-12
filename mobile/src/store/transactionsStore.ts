@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Transaction } from '@types/domain.types';
+import type { Transaction } from '@/types/domain.types';
 
 interface TransactionsState {
   /** childId → liste de transactions */

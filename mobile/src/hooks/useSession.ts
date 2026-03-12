@@ -10,57 +10,53 @@ import { useChildrenStore } from '@store/childrenStore';
  * À placer dans _layout.tsx racine.
  */
 export function useSession() {
-  const { user, setUser, setLoading } = useAuthStore();
-  const { setChildren } = useChildrenStore();
+  const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
     let mounted = true;
 
     const hydrateSession = async () => {
+      // Accès aux actions via getState() : pas de subscription, références stables
+      const { setUser, setLoading } = useAuthStore.getState();
+      const { setChildren } = useChildrenStore.getState();
+
       setLoading(true);
       const session = await authService.getSession();
 
       if (!session || !mounted) {
-        setLoading(false);
+        useAuthStore.getState().setLoading(false);
         return;
       }
 
-      // Charger le profil parent
-      const result = await authService.signInParent(
-        session.user.email ?? '',
-        '' // JWT déjà valide — Supabase l'utilisera via la session
-      );
+      // Récupérer le profil parent via la session Supabase active
+      const profile = await authService.getProfile(session.user.id);
 
-      if (result.data && mounted) {
-        setUser(result.data);
+      if (profile.data && mounted) {
+        setUser(profile.data);
 
         // Pré-charger les enfants
-        const childrenResult = await childrenService.getChildren(
-          result.data.id
-        );
+        const childrenResult = await childrenService.getChildren(profile.data.id);
         if (childrenResult.data && mounted) {
           setChildren(childrenResult.data);
         }
       }
 
-      setLoading(false);
+      useAuthStore.getState().setLoading(false);
     };
 
     hydrateSession();
 
-    const { data: subscription } = authService.onAuthStateChange(
-      (event) => {
-        if (event === 'SIGNED_OUT') {
-          router.replace('/(auth)/login');
-        }
+    const { data: subscription } = authService.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        router.replace('/(auth)/login');
       }
-    );
+    });
 
     return () => {
       mounted = false;
       subscription.subscription.unsubscribe();
     };
-  }, [setUser, setLoading, setChildren]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { user };
 }

@@ -1,6 +1,6 @@
 import { supabase } from '@config/supabase';
 import { safeCall } from '@utils/safeCall';
-import type { WishlistItem, ServiceResult } from '@types/domain.types';
+import type { WishlistItem, ServiceResult } from '@/types/domain.types';
 
 function dbRowToWishlistItem(row: Record<string, unknown>): WishlistItem {
   return {
@@ -59,7 +59,7 @@ export const wishlistService = {
           product_ref: data.productRef ?? null,
           notes: data.notes ?? null,
         })
-        .select()
+        .select("*")
         .single();
 
       if (error || !item) throw new Error(error?.message ?? 'Erreur ajout wishlist.');
@@ -83,7 +83,7 @@ export const wishlistService = {
         .from('wishlists')
         .update({ purchased_at: new Date().toISOString() })
         .eq('id', itemId)
-        .select()
+        .select("*")
         .single();
 
       if (error || !data) throw new Error(error?.message ?? 'Erreur mise à jour.');

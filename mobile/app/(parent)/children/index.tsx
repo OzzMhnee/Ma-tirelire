@@ -5,29 +5,23 @@ import { Link, router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { Card, Button } from '@components/ui';
-import { useAuthStore } from '@store/authStore';
-import { useChildrenStore } from '@store/childrenStore';
-import { childrenService } from '@services/children.service';
+import { useChildrenList } from '@hooks/useChildrenList';
+import { formatCurrency } from '@utils/format';
 
 export default function ChildrenListScreen() {
   const { t } = useTranslation();
-  const user = useAuthStore((s) => s.user);
-  const { children, setChildren } = useChildrenStore();
-  const [refreshing, setRefreshing] = React.useState(false);
+  const { children, refreshing, refresh } = useChildrenList();
 
-  const load = async () => {
-    if (!user) return;
-    const res = await childrenService.getChildren(user.id);
-    if (res.success && res.data) setChildren(res.data);
-  };
-
-  useEffect(() => { load(); }, []);
-  const onRefresh = async () => { setRefreshing(true); await load(); setRefreshing(false); };
+  useEffect(() => {
+    if (children.length === 1) {
+      router.replace(`/(parent)/children/${children[0].id}`);
+    }
+  }, [children, router]);
 
   return (
     <View style={styles.flex}>
       <ScrollView
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
       >
         <Text variant="headlineSmall" style={styles.title}>{t('parent.children.title')}</Text>
         {children.length === 0 ? (
@@ -40,12 +34,12 @@ export default function ChildrenListScreen() {
               <Card style={styles.card}>
                 <View style={styles.row}>
                   <View>
-                    <Text variant="titleSmall">{child.name}</Text>
+                    <Text variant="titleSmall">{child.pseudonym}</Text>
                     <Text style={styles.age}>
-                      {child.age ? t('parent.children.age', { age: child.age }) : ''}
+                      {child.birthYear ? t('parent.children.birthYearValue', { year: child.birthYear }) : ''}
                     </Text>
                   </View>
-                  <Text style={styles.balance}>{(child.balance ?? 0).toFixed(2)} €</Text>
+                  <Text style={styles.balance}>{formatCurrency(child.balance ?? 0)}</Text>
                 </View>
               </Card>
             </Link>

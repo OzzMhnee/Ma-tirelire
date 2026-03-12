@@ -1,30 +1,53 @@
 import React from 'react';
-import { Chip, ChipProps } from 'react-native-paper';
+import { View, Text, StyleSheet } from 'react-native';
+import { useAppTheme } from '@/theme/ThemeProvider';
 
-type Variant = 'success' | 'warning' | 'error' | 'info' | 'default';
+type Tone = 'neutral' | 'success' | 'warning' | 'danger';
 
-const VARIANT_COLORS: Record<Variant, string> = {
-  success: '#4caf50',
-  warning: '#ff9800',
-  error:   '#f44336',
-  info:    '#2196f3',
-  default: '#9e9e9e',
+type Props = {
+  label: string;
+  tone?: Tone;
+  /** Alias rétro-compat ("error"→danger, "default"→neutral) */
+  variant?: 'success' | 'warning' | 'error' | 'info' | 'default';
 };
 
-interface Props extends Omit<ChipProps, 'children'> {
-  label: string;
-  variant?: Variant;
-}
+const bgMap: Record<Tone, string> = {
+  neutral: '',   // sera rempli depuis colors
+  success: '#dcfce7',
+  warning: '#fef3c7',
+  danger:  '#fee2e2',
+};
 
-export function Badge({ label, variant = 'default', style, ...rest }: Props) {
-  const color = VARIANT_COLORS[variant];
+const textMap: Record<Tone, string> = {
+  neutral: '',   // sera rempli depuis colors
+  success: '#166534',
+  warning: '#92400e',
+  danger:  '#991b1b',
+};
+
+export function Badge({ label, tone, variant }: Props) {
+  const { theme: { colors } } = useAppTheme();
+
+  // Résoudre le tone depuis variant si tone absent
+  const resolvedTone: Tone =
+    tone ??
+    (variant === 'error' ? 'danger' : variant === 'default' || !variant ? 'neutral' : variant as Tone);
+
+  const bg   = resolvedTone === 'neutral' ? colors.muted    : bgMap[resolvedTone];
+  const txc  = resolvedTone === 'neutral' ? colors.text     : textMap[resolvedTone];
+
   return (
-    <Chip
-      style={[{ backgroundColor: color + '22' }, style]}
-      textStyle={{ color, fontSize: 11, fontWeight: '600' }}
-      {...rest}
-    >
-      {label}
-    </Chip>
+    <View style={[styles.badge, { backgroundColor: bg }]}>
+      <Text style={{ color: txc, fontWeight: '600', fontSize: 12 }}>{label}</Text>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  badge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+    alignSelf: 'flex-start',
+  },
+});

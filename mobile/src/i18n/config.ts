@@ -5,7 +5,7 @@ import fr from './locales/fr.json';
 import en from './locales/en.json';
 
 i18n.use(initReactI18next).init({
-  compatibilityJSON: 'v3',
+  compatibilityJSON: 'v4',
   resources: {
     fr: { translation: fr },
     en: { translation: en },

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Mission } from '@types/domain.types';
+import type { Mission } from '@/types/domain.types';
 
 interface MissionsState {
   missions: Mission[];

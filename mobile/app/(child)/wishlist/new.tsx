@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { Input, Button, InlineAlert } from '@components/ui';
 import { useAuthStore } from '@store/authStore';
 import { wishlistService } from '@services/wishlist.service';
+import { childAuthService } from '@services/childAuth.service';
 
 const wishSchema = z.object({
   name:          z.string().min(1, 'Nom requis'),
@@ -21,6 +22,8 @@ type WishInput = z.infer<typeof wishSchema>;
 export default function NewWishScreen() {
   const { t } = useTranslation();
   const activeChild = useAuthStore((s) => s.activeChild);
+  const user = useAuthStore((s) => s.user);
+  const isStandaloneChild = !user && !!activeChild;
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -33,14 +36,17 @@ export default function NewWishScreen() {
     if (!activeChild) return;
     setLoading(true);
     setError(null);
-    const res = await wishlistService.addWishlistItem({
-      child_id: activeChild.id,
-      name: data.name,
-      target_amount: Number(data.targetAmount.replace(',', '.')),
-      image_url: data.imageUrl || undefined,
-    });
+    const price = Number(data.targetAmount.replace(',', '.'));
+    const res = isStandaloneChild
+      ? await childAuthService.addWishlistItem(activeChild.id, data.name, price, data.imageUrl || undefined)
+      : await wishlistService.addToWishlist({
+          childId: activeChild.id,
+          productName: data.name,
+          productPrice: price,
+          productImageUrl: data.imageUrl || undefined,
+        });
     setLoading(false);
-    if (!res.success) setError(res.error?.message ?? t('common.error'));
+    if (res.error) setError(res.error?.message ?? t('common.error'));
     else router.back();
   };
 
@@ -64,7 +70,7 @@ export default function NewWishScreen() {
           )} />
 
         <Button label={t('common.save')} onPress={handleSubmit(onSubmit)} loading={loading} style={styles.btn} />
-        <Button label={t('common.cancel')} mode="text" onPress={() => router.back()} />
+        <Button label={t('common.cancel')} variant="ghost" onPress={() => router.back()} />
       </ScrollView>
     </KeyboardAvoidingView>
   );

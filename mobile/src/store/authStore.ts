@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { ParentUser, AppRole, Child } from '@types/domain.types';
+import type { ParentUser, AppRole, Child } from '@/types/domain.types';
 
 interface AuthState {
   // État
@@ -27,7 +27,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       role: null,
       activeChild: null,
-      isLoading: false,
+      isLoading: true,  // true jusqu'à ce que useSession termine
       error: null,
 
       setUser: (user) => set({ user }),
@@ -47,6 +47,9 @@ export const useAuthStore = create<AuthState>()(
         role: state.role,
         activeChild: state.activeChild,
       }),
+      // skipHydration: évite que persist appelle setState pendant le montage
+      // (sinon React 19 useSyncExternalStore détecte un snapshot modifié → boucle infinie)
+      skipHydration: true,
     }
   )
 );

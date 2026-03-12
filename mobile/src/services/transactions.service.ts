@@ -1,6 +1,6 @@
 import { supabase } from '@config/supabase';
 import { safeCall } from '@utils/safeCall';
-import type { Transaction, TransactionType, ServiceResult } from '@types/domain.types';
+import type { Transaction, TransactionType, ServiceResult } from '@/types/domain.types';
 
 function dbRowToTransaction(row: Record<string, unknown>): Transaction {
   return {
@@ -73,7 +73,7 @@ export const transactionsService = {
           description: data.description,
           created_by: data.createdBy,
         })
-        .select()
+        .select("*")
         .single();
 
       if (error || !tx) throw new Error(error?.message ?? 'Erreur transaction.');

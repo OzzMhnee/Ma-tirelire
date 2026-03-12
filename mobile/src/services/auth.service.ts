@@ -8,7 +8,10 @@ import type {
   ParentUser,
   ConsentData,
   ServiceResult,
-} from '@types/domain.types';
+} from '@/types/domain.types';
+import type { Database } from '@/types/database.types';
+
+type ParentRow = Database['public']['Tables']['parents']['Row'];
 
 function dbRowToParent(row: {
   id: string;
@@ -41,13 +44,14 @@ export const authService = {
       if (!authData.user) throw new Error('Aucun utilisateur retourné.');
 
       // 2. Insérer le profil parent (id = auth.uid())
-      const { data: parent, error: dbError } = await supabase
+      const { data: _parentInsert, error: dbError } = await supabase
         .from('parents')
         .insert({ id: authData.user.id, email, username })
-        .select()
+        .select('*')
         .single();
 
       if (dbError) throw new Error(dbError.message);
+      const parent = _parentInsert as ParentRow;
 
       // 3. Enregistrer le consentement RGPD
       await authService.recordConsent({
@@ -90,15 +94,16 @@ export const authService = {
       if (error) throw new Error(error.message);
       if (!data.user) throw new Error('Connexion échouée.');
 
-      const { data: parent, error: dbError } = await supabase
+      const { data: _parentSelect, error: dbError } = await supabase
         .from('parents')
         .select('*')
         .eq('id', data.user.id)
         .single();
 
-      if (dbError || !parent) {
+      if (dbError || !_parentSelect) {
         throw new Error('Profil parent introuvable.');
       }
+      const parent = _parentSelect as ParentRow;
 
       return dbRowToParent(parent);
     });
@@ -129,6 +134,16 @@ export const authService = {
     });
   },
 
+  async deleteOwnAccount(): Promise<ServiceResult<void>> {
+    return safeCall(async () => {
+      const { error } = await supabase.rpc('delete_parent_account');
+      if (error) throw new Error(error.message);
+
+      // Nettoyage local de session après suppression du compte.
+      await supabase.auth.signOut();
+    });
+  },
+
   async recordConsent(data: ConsentData): Promise<ServiceResult<void>> {
     return safeCall(async () => {
       const { error } = await supabase.from('consents').insert({
@@ -140,6 +155,18 @@ export const authService = {
         user_agent: data.userAgent,
       });
       if (error) throw new Error(error.message);
+    });
+  },
+
+  async getProfile(userId: string): Promise<ServiceResult<ParentUser>> {
+    return safeCall(async () => {
+      const { data, error } = await supabase
+        .from('parents')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      if (error || !data) throw new Error('Profil parent introuvable.');
+      return dbRowToParent(data as ParentRow);
     });
   },
 
