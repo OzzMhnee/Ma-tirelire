@@ -164,11 +164,22 @@
   },
   "child": {
     "dashboard": {
-      "greeting": "Hi {{name}}",
-      "balance": "Current balance",
-      "topWish": "Top wish",
+      "greeting": "Hi {{name}} \ud83d\udc4b",
+      "balance": "My piggy bank",
+      "topWish": "My next wish",
       "missions": "My missions",
-      "seeWishlist": "See my wishlist"
+      "missionsToDoCount": "{{count}} mission(s) to do",
+      "completeMission": "I'm done!",
+      "noMissions": "No mission right now \ud83c\udf1f",
+      "seeWishlist": "See my wishlist",
+      "seeAllMissions": "See all missions",
+      "recentTransactions": "Recent activity",
+      "noTransactions": "No activity yet.",
+      "seeHistory": "See full history",
+      "levelXp": "Level {{level}}",
+      "xpProgress": "{{current}} / {{next}} XP",
+      "wishProgress": "{{percent}}% reached",
+      "parentNickname": "Managed by {{name}}"
     },
     "missions": {
       "empty": "No mission available."

@@ -4,7 +4,8 @@ import { useAuthStore } from '@store/authStore';
 export default function ChildLayout() {
   const user = useAuthStore((s) => s.user);
   const activeChild = useAuthStore((s) => s.activeChild);
-  if (!user) return <Redirect href="/(auth)/login" />;
+  // Autoriser l'accès si session parent OU connexion enfant autonome
+  if (!user && !activeChild) return <Redirect href="/(auth)/login" />;
   if (!activeChild) return <Redirect href="/(parent)/children/index" />;
 
   return (

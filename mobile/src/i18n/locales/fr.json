@@ -164,11 +164,22 @@
   },
   "child": {
     "dashboard": {
-      "greeting": "Salut {{name}}",
-      "balance": "Solde actuel",
-      "topWish": "Souhait principal",
+      "greeting": "Salut {{name}} \ud83d\udc4b",
+      "balance": "Ma tirelire",
+      "topWish": "Mon prochain souhait",
       "missions": "Mes missions",
-      "seeWishlist": "Voir ma wishlist"
+      "missionsToDoCount": "{{count}} mission(s) à faire",
+      "completeMission": "J'ai terminé !",
+      "noMissions": "Pas de mission pour le moment \ud83c\udf1f",
+      "seeWishlist": "Voir ma wishlist",
+      "seeAllMissions": "Voir toutes les missions",
+      "recentTransactions": "Dernières opérations",
+      "noTransactions": "Aucune opération pour le moment.",
+      "seeHistory": "Voir l'historique complet",
+      "levelXp": "Niveau {{level}}",
+      "xpProgress": "{{current}} / {{next}} XP",
+      "wishProgress": "{{percent}}% atteint",
+      "parentNickname": "Géré par {{name}}"
     },
     "missions": {
       "empty": "Aucune mission disponible."

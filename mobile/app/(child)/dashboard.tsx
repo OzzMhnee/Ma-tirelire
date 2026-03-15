@@ -4,87 +4,201 @@ import { Text, ProgressBar } from 'react-native-paper';
 import { Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
-import { Card, Badge } from '@components/ui';
+import { Card } from '@components/ui';
+import { BalanceCard, MissionCard, WishProgressCard, TransactionRow } from '@components/child';
 import { useChildDashboard } from '@hooks/useChildDashboard';
-import { formatCurrency } from '@utils/format';
+import { useAppTheme } from '@/theme/ThemeProvider';
 
 export default function ChildDashboard() {
   const { t } = useTranslation();
-  const { activeChild, balance, todoMissions, topWish, isLoading, refresh } = useChildDashboard();
+  const { theme: { colors } } = useAppTheme();
+  const {
+    activeChild,
+    balance,
+    todoMissions,
+    completedMissions,
+    topWish,
+    recentTransactions,
+    level,
+    experience,
+    xpNext,
+    xpProgress,
+    completeMission,
+    isLoading,
+    refresh,
+  } = useChildDashboard();
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
+      contentContainerStyle={styles.content}
       refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} />}
     >
+      {/* ─── En-tête : Greeting + Niveau ─── */}
       <View style={styles.header}>
-        <Text variant="headlineMedium" style={styles.greeting}>
+        <Text variant="headlineMedium" style={[styles.greeting, { color: colors.primary }]}>
           {t('child.dashboard.greeting', { name: activeChild?.pseudonym })}
         </Text>
+        {activeChild?.parentNickname ? (
+          <Text style={[styles.subtitle, { color: colors.muted }]}>
+            {t('child.dashboard.parentNickname', { name: activeChild.parentNickname })}
+          </Text>
+        ) : null}
       </View>
 
-      {/* Tirelire */}
-      <Card style={styles.balanceCard}>
-        <Text variant="bodyMedium" style={styles.balanceLabel}>{t('child.dashboard.balance')}</Text>
-        <Text variant="displaySmall" style={styles.balance}>{formatCurrency(balance)}</Text>
+      {/* ─── Niveau & XP ─── */}
+      <Card style={styles.section}>
+        <View style={styles.levelRow}>
+          <Text style={[styles.levelText, { color: colors.primary }]}>
+            {t('child.dashboard.levelXp', { level })}
+          </Text>
+          <Text style={[styles.xpText, { color: colors.muted }]}>
+            {t('child.dashboard.xpProgress', { current: experience, next: xpNext })}
+          </Text>
+        </View>
+        <ProgressBar progress={xpProgress} color={colors.primary} style={styles.xpBar} />
       </Card>
 
-      {/* Wishlist top */}
-      {topWish && (
-        <Card style={styles.wishCard}>
-          <Text variant="titleSmall" style={styles.sectionLabel}>{t('child.dashboard.topWish')}</Text>
-          <Text variant="bodyMedium">{topWish.productName}</Text>
-          <Text style={styles.wishPrice}>{formatCurrency(topWish.productPrice)}</Text>
-          <ProgressBar
-            progress={(topWish.progressPercent ?? 0) / 100}
-            color="#512da8"
-            style={styles.progress}
+      {/* ─── Tirelire ─── */}
+      <BalanceCard balance={balance} label={t('child.dashboard.balance')} />
+
+      {/* ─── Souhait principal ─── */}
+      {topWish ? (
+        <View style={styles.section}>
+          <WishProgressCard
+            item={topWish}
+            label={t('child.dashboard.topWish')}
+            progressLabel={t('child.dashboard.wishProgress', {
+              percent: Math.round(topWish.progressPercent ?? 0),
+            })}
           />
-          <Text style={styles.progressText}>
-            {Math.round(topWish.progressPercent ?? 0)} %
-          </Text>
+          <Link href="/(child)/wishlist/index" style={[styles.link, { color: colors.primary }]}>
+            {t('child.dashboard.seeWishlist')}
+          </Link>
+        </View>
+      ) : (
+        <Card>
+          <Link href="/(child)/wishlist/new" style={[styles.link, { color: colors.primary }]}>
+            {t('child.dashboard.seeWishlist')}
+          </Link>
         </Card>
       )}
 
-      {/* Missions */}
-      <Text variant="titleMedium" style={styles.sectionTitle}>{t('child.dashboard.missions')}</Text>
-      {todoMissions.length === 0 ? (
-        <Card style={styles.mx}><Text style={{ color: '#888' }}>{t('child.missions.empty')}</Text></Card>
+      {/* ─── Missions à faire ─── */}
+      <Text variant="titleMedium" style={[styles.sectionTitle, { color: colors.text }]}>
+        {t('child.dashboard.missions')}
+        {todoMissions.length > 0 ? (
+          <Text style={[styles.countBadge, { color: colors.muted }]}>
+            {'  '}{t('child.dashboard.missionsToDoCount', { count: todoMissions.length })}
+          </Text>
+        ) : null}
+      </Text>
+
+      {todoMissions.length === 0 && completedMissions.length === 0 ? (
+        <Card>
+          <Text style={{ color: colors.muted, textAlign: 'center' }}>
+            {t('child.dashboard.noMissions')}
+          </Text>
+        </Card>
       ) : (
-        todoMissions.map((m) => (
-          <Card key={m.id} style={styles.mx}>
-            <View style={styles.row}>
-              <Text variant="bodyMedium">{m.title}</Text>
-              <Badge
-                label={formatCurrency(m.reward)}
-                variant={m.status === 'pending' ? 'warning' : 'info'}
-              />
-            </View>
-          </Card>
-        ))
+        <>
+          {todoMissions.map((m) => (
+            <MissionCard
+              key={m.id}
+              mission={m}
+              completeLabel={t('child.dashboard.completeMission')}
+              onComplete={completeMission}
+            />
+          ))}
+          {completedMissions.map((m) => (
+            <MissionCard key={m.id} mission={m} completeLabel="" />
+          ))}
+        </>
       )}
 
-      <Link href="/(child)/wishlist/index" style={styles.wishLink}>
-        {t('child.dashboard.seeWishlist')}
-      </Link>
+      {/* ─── Historique récent ─── */}
+      {recentTransactions.length > 0 ? (
+        <View style={styles.section}>
+          <Text variant="titleMedium" style={[styles.sectionTitle, { color: colors.text }]}>
+            {t('child.dashboard.recentTransactions')}
+          </Text>
+          <Card>
+            {recentTransactions.map((tx) => (
+              <TransactionRow key={tx.id} transaction={tx} />
+            ))}
+          </Card>
+          <Link href="/(child)/wishlist/index" style={[styles.link, { color: colors.primary }]}>
+            {t('child.dashboard.seeHistory')}
+          </Link>
+        </View>
+      ) : (
+        <View style={styles.section}>
+          <Text variant="titleMedium" style={[styles.sectionTitle, { color: colors.text }]}>
+            {t('child.dashboard.recentTransactions')}
+          </Text>
+          <Card>
+            <Text style={{ color: colors.muted, textAlign: 'center' }}>
+              {t('child.dashboard.noTransactions')}
+            </Text>
+          </Card>
+        </View>
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container:    { flex: 1, backgroundColor: '#f3f0ff' },
-  header:       { padding: 16, paddingTop: 48 },
-  greeting:     { fontWeight: '700', color: '#512da8' },
-  balanceCard:  { margin: 16, alignItems: 'center' },
-  balanceLabel: { color: '#666' },
-  balance:      { color: '#4caf50', fontWeight: '700' },
-  wishCard:     { marginHorizontal: 16 },
-  sectionLabel: { color: '#512da8', marginBottom: 4 },
-  wishPrice:    { color: '#888', fontSize: 12 },
-  progress:     { marginTop: 8, borderRadius: 4, height: 8 },
-  progressText: { textAlign: 'right', fontSize: 11, color: '#888', marginTop: 2 },
-  sectionTitle: { margin: 16, marginBottom: 4, fontWeight: '600' },
-  mx:           { marginHorizontal: 16 },
-  row:          { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  wishLink:     { textAlign: 'center', color: '#512da8', margin: 20, fontWeight: '600' },
+  container: {
+    flex: 1,
+  },
+  content: {
+    padding: 16,
+    paddingTop: 48,
+    paddingBottom: 32,
+    gap: 16,
+  },
+  header: {
+    marginBottom: 4,
+  },
+  greeting: {
+    fontWeight: '800',
+  },
+  subtitle: {
+    fontSize: 13,
+    marginTop: 2,
+  },
+  section: {
+    gap: 8,
+  },
+  sectionTitle: {
+    fontWeight: '700',
+    marginTop: 4,
+  },
+  countBadge: {
+    fontSize: 13,
+    fontWeight: '400',
+  },
+  levelRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  levelText: {
+    fontWeight: '700',
+    fontSize: 15,
+  },
+  xpText: {
+    fontSize: 13,
+  },
+  xpBar: {
+    borderRadius: 4,
+    height: 8,
+  },
+  link: {
+    textAlign: 'center',
+    fontWeight: '600',
+    marginTop: 4,
+    fontSize: 14,
+  },
 });
